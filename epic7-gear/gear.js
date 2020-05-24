@@ -1022,116 +1022,15 @@ function report( enc_time, score ) {
 	}
 	
 	// console.log( "op: " + ( op_cost_numerator / op_cost_denominator ) + " op_cost: " + op_cost );
+	str = str + "YOUR GEAR IS TRASH";
 	
-	if ( percent_score >= 70 && getGearEncLevel() > 4 ) {
-
-		if ( g_lang === 'tw' )
-			str = str + "[總評] 神裝! 記得鎖起來! 此裝備需要花費 " + op_cost + " 個裝備才做得出相近的點數。<br>";
-		else 
-			str = str + "[Summary] Godlike gear! Don't forget to lock it. You need to spend " + op_cost + " gears to come out a similar one.<br>";
-	}
-	else if ( percent_score >= 70 || percent_score >= getScoreThreshold() ) {
-		
-		var threshold = percent_score > 70 ? 70 : getScoreThreshold();
-		
-		if ( g_lang === 'tw' ) 
-			str = str + "[總評] 還不錯，建議留下。此裝備需要花費 " + op_cost + " 個裝備才做得出相近的點數。<br>";
-		else 
-			str = str + "[Summary] Not bad. You should keep it. You need to spend " + op_cost + " gears to come out a similar one.<br>";
-	}
-	else if ( valid_data_high_score_count > 0 ) {
-		if ( g_lang === 'tw' ) {
-			str = str + "[總評] 雖然裝備潛能值未達" + getScoreThreshold() + "%，但" + getSubstatName( valid_data_high_score_idx[0] );
-			
-			for ( var idx = 1; idx < valid_data_high_score_count; idx ++ ) {
-				str = str + ", " + getSubstatName( valid_data_high_score_idx[idx] );
-			}
-				
-			if ( valid_data_high_score_count > 1 ) {
-					str = str + "都";
-			}
-			
-			str = str + "很高，可以留下。此裝備需要花費 " + op_cost + " 個裝備才做得出相近的點數。<br>";
-		}
-		else {
-			str = str + "[Summary] Although the score is not very high, it has a good roll in " +
-				getSubstatName( valid_data_high_score_idx[0] ).toLowerCase();
-			
-			for ( var idx = 1; idx < valid_data_high_score_count - 1; idx ++ ) {
-				str = str + ", " + getSubstatName( valid_data_high_score_idx[idx] ).toLowerCase();
-			}
-			
-			if ( valid_data_high_score_count > 1 ) {
-				str = str + " and " + getSubstatName( valid_data_high_score_idx[idx] ).toLowerCase();
-			}
-			
-			str = str + ", keep it if you want. You need to spend " + op_cost + " gears to come out a similar one.<br>";
-		}
-	}
-	else {
-		if ( g_lang === 'tw' ) 
-			str = str + "[總評] 如果不缺裝備，建議賣掉。此裝備需要花費 " + op_cost + " 個裝備才做得出相近的點數。<br>";
-		else
-			str = str + "[Summary] Sell it if you are lack of inventory. You need to spend " + op_cost + " gears to come out a similar one.<br>";
-	}
+	
+	
 	
 	str = str + '</span>';
 	
-	if ( g_lang === 'tw' ) {
-		str = str + "[總分] 裝備得分為 " +  int_score + " 分，滿分為 " + max_score + " 分，開發了 " + percent_score + " % 的潛能。<br>";
-		str = str + "[跳點]<br>";
-		
-		for ( var idx = 0; idx < valid_data_size; idx ++ ) {
-
-			str = str + getSubstatName( valid_data_type[idx] ) + "跳" + enc_time[idx] + "次，共得到" + 
-				  valid_data[idx] + "點，完美值為" + 
-				  substat_max[valid_data_type[idx]] * enc_time[idx] + "點。";
-				  
-			if ( isReforged() ) {
-				console.log( "reforge type " + idx + " (enc_time[idx] - 1)=" + (enc_time[idx] - 1) + 
-				   " getReforge( enc_time[idx] - 1 )[idx]" + getReforge( enc_time[idx] - 1 )[valid_data_type[idx]] );
-				str = str + "重鑄點數" + getReforge( enc_time[idx] - 1 )[valid_data_type[idx]] + "點。";
-
-				if ( valid_data[idx] > substat_max[valid_data_type[idx]] * enc_time[idx] + getReforge( enc_time[idx] - 1 )[valid_data_type[idx]] ) {
-					str = str + '<span style="font-color: red">警告: 數值超過最大值。</span>';
-				}
-			}
-			else {				  
-				if ( valid_data[idx] > substat_max[valid_data_type[idx]] * enc_time[idx] ) {
-					str = str + '<span style="font-color: red">警告: 數值超過最大值。</span>';
-				}
-			}
-			
-			str = str + '<br>';
-		}
-	}
-	else {
-		str = str + "[Score] Gear's score is " +  int_score + " out of " + max_score + ". It is " + percent_score + " % of its potential.<br>";
-		str = str + "[Detail]<br>";
-		
-		for ( var idx = 0; idx < valid_data_size; idx ++ ) {
-
-			str = str + getSubstatName( valid_data_type[idx] ) + " rolled " + enc_time[idx] + " times, and got " + 
-				  valid_data[idx] + " out of " + 
-				  substat_max[valid_data_type[idx]] * enc_time[idx] + " points.";
-				  
-			if ( isReforged() ) {
-				
-				str = str + "Got " + getReforge( enc_time[idx] - 1 )[valid_data_type[idx]] + " points from reforge.";
-				
-				if ( valid_data[idx] > substat_max[valid_data_type[idx]] * enc_time[idx] + getReforge( enc_time[idx] - 1 )[valid_data_type[idx]] ) {
-					str = str + '<span style="font-color: red">Warning: The value is larger than the possible limitation.</span>';
-				}
-			}
-			else {				  
-				if ( valid_data[idx] > substat_max[valid_data_type[idx]] * enc_time[idx] ) {
-					str = str + '<span style="font-color: red">Warning: The value is larger than the possible limitation.</span>';
-				}
-			}
-			
-			str = str + '<br>';
-		}
-	}
+	
+	
 
 	
 	err( str );
